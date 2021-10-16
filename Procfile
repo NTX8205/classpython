@@ -1,1 +1,1 @@
-web: gunicorn tc_flask:app
+web: gunicorn ex_flask_server:app
