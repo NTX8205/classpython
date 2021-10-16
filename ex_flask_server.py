@@ -8,7 +8,7 @@ def index():
     homepage = "<h1>許哲睿Python測試網頁</h1>"
     homepage += "<a href=/mis>MIS</a><br>"
     homepage += "<a href=/current>開啟網頁及顯示日期時間</a><br>"
-    homepage += "<a href=/welcome?nick=0011>開啟網頁及傳送使用者暱稱</a><br>"
+    homepage += "<a href=/welcome?nick=許哲睿>開啟網頁及傳送使用者暱稱</a><br>"
     homepage += "<a href=/hi>計算總拜訪次數</a><br>"
     homepage += "<a href=https://www1.pu.edu.tw/~s1092805/index.html>我的個人頁面</a><br>"
     return homepage
@@ -40,5 +40,5 @@ def hi():# 載入原始檔案
 
 
 if __name__ == "__main__":
-    app.run()
-    #serve(app, host='0.0.0.0', port=8080)
+    #app.run()
+    serve(app, host='0.0.0.0', port=8080)
