@@ -1,0 +1,1 @@
+web: gunicorn tc_flask:app
