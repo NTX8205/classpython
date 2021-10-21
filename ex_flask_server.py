@@ -27,6 +27,15 @@ def welcome():
     user = request.values.get("nick")
     return render_template("welcome.html", name=user)
 
+@app.route("/login", methods=["POST","GET"])
+def login():
+    if request.method == "POST":
+        user = request.form["nm"]
+        return "您輸入的名字為：" + user 
+    else:
+        return render_template("login.html")
+
+
 @app.route("/hi")
 def hi():# 載入原始檔案
     f = open('classpython\count.txt', "r")
