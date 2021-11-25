@@ -12,7 +12,7 @@ db = firestore.client()
 sched = BlockingScheduler()
 
 
-@sched.scheduled_job("interval", minutes=1)
+@sched.scheduled_job("interval", days=1)
 def timed_job():
 	url = "http://www.atmovies.com.tw/movie/next/"
 	Data = requests.get(url)
