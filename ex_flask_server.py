@@ -7,6 +7,9 @@ cred = credentials.Certificate(
     "project-analytics-8acd9-firebase-adminsdk-6usuy-2415c74209.json")
 firebase_admin.initialize_app(cred)
 db = firestore.client()
+import requests
+from bs4 import BeautifulSoup
+
 
 app = Flask(__name__)
 
