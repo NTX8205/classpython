@@ -22,9 +22,6 @@ def index():
     homepage += "<a href=/hi>計算總拜訪次數</a><br>"
     homepage += "<a href=/aboutme>關於子青老師 (響應式網頁實例)</a><br>"
     homepage += "<br><a href=/read>讀取Firestore資料</a><br>"
-    homepage += "<br><a href=/create>新增Firestore資料</a><br>"
-    homepage += "<br><a href=/delete>刪除Firestore資料</a><br>"
-    homepage += "<br><a href=/update>上傳Firestore資料</a><br>"
     homepage += "<a href=/resource>MIS resource</a><br>"
     homepage += "<br><a href=/spider>讀取開眼電影即將上映影片，寫入Firestore</a><br>"
     homepage += "<br><a href=/search>輸入關鍵字進行資料查詢</a><br>"
@@ -83,53 +80,6 @@ def read():
     for doc in docs:
         Result += "文件內容：{}".format(doc.to_dict()) + "<br>"
     return Result
-
-@app.route("/create")
-def create():
-    docs = [
-        {
-            "name": "陳武林",
-            "mail": "wlchen@pu.edu.tw",
-            "lab": 665
-        },
-        {
-            "name": "莊育維",
-            "mail": "ywchuang@pu.edu.tw",
-            "lab": 566
-        },
-        {
-            "name": "汪于茵",
-            "mail": "yywang13@pu.edu.tw",
-            "lab": 674
-        },
-        {
-            "name": "許哲睿",
-            "mail": "s1092805@pu.edu.tw",
-            "lab": 659
-        }
-    ]
-
-    collection_ref = db.collection("靜宜資管")
-    for doc in docs:
-       collection_ref.add(doc)
-
-@app.route("/delete")
-def delete():
-    collection_ref = db.collection("靜宜資管")
-    docs = collection_ref.where("lab", "==", 579).get()
-    NewData = {"name": "子青老師"}
-    for doc in docs:
-        doc_ref = db.collection("靜宜資管").document(doc.id)
-        doc_ref.delete()
-
-@app.route("/update")
-def update():
-    Rcollection_ref = db.collection("靜宜資管")
-    docs = collection_ref.where("lab","==", 579).get()
-    NewData = {"name": "子青老師"}
-    for doc in docs:
-        doc_ref = db.collection("靜宜資管").document(doc.id)
-        doc_ref.update(NewData)
 
 @app.route('/spider')
 def spider():
