@@ -13,41 +13,6 @@ db = firestore.client()
 sched = BlockingScheduler()
 
 
-@sched.scheduled_job("interval", minutes=1)
-def timed_job():
-	url = "http://www.atmovies.com.tw/movie/next/"
-	Data = requests.get(url)
-	Data.encoding = "utf-8"
-	sp = BeautifulSoup(Data.text, "html.parser")
-	lastUpdate = sp.find("div", class_="smaller09").text[5:]
-	result = sp.select(".filmListAllX li")
-	for item in result:
-		picture = item.find("img").get("src").replace(" ", "")
-		title = item.find("div", class_="filmtitle").text
-		movie_id = item.find("div", class_="filmtitle").find(
-			"a").get("href").replace("/", "").replace("movie", "")
-		hyperlink = "http://www.atmovies.com.tw" + \
-			item.find("div", class_="filmtitle").find("a").get("href")
-		show = item.find("div", class_="runtime").text.replace("上映日期：", "")
-		show = show.replace("片長：", "")
-		show = show.replace("分", "")
-		showDate = show[0:10]
-		showLength = show[13:]
-		doc = {
-			"title": title,
-			"picture": picture,
-			"hyperlink": hyperlink,
-			"showDate": showDate,
-			"showLength": showLength,
-			"lastUpdate": lastUpdate
-		}
-		doc_ref = db.collection("電影").document(movie_id)
-		doc_ref.set(doc)
-
-
-sched.start()
-
-
 app = Flask(__name__)
 
 @app.route('/')
@@ -101,19 +66,15 @@ def login():
     else:
         return render_template("login.html")
 
-
 @app.route("/resource")
 def classweb():
     return render_template("links.html")
-
 
 @app.route("/aboutme")
 def about():
     tz = timezone(timedelta(hours=+8))
     now = datetime.now(tz)
     return render_template("aboutme.html",datetime = str(now))
-
-
 
 @app.route("/read")
 def read():
@@ -128,85 +89,49 @@ def read():
 @app.route("/create")
 def create():
     docs = [
-
         {
-
             "name": "陳武林",
-
             "mail": "wlchen@pu.edu.tw",
-
             "lab": 665
-
         },
-
         {
-
             "name": "莊育維",
-
             "mail": "ywchuang@pu.edu.tw",
-
             "lab": 566
-
         },
-
         {
-
             "name": "汪于茵",
-
             "mail": "yywang13@pu.edu.tw",
-
             "lab": 674
-
         },
-
         {
-
             "name": "許哲睿",
-
             "mail": "s1092805@pu.edu.tw",
-
             "lab": 659
-
         }
-
     ]
 
-
     collection_ref = db.collection("靜宜資管")
-
     for doc in docs:
-
         collection_ref.add(doc)
 
 @app.route("/delete")
 def delete():
     collection_ref = db.collection("靜宜資管")
-
-
     docs = collection_ref.where("lab", "==", 579).get()
-
     NewData = {"name": "子青老師"}
-
     for doc in docs:
-
         doc_ref = db.collection("靜宜資管").document(doc.id)
-
         doc_ref.delete()
 
 @app.route("/update")
 def update():
     Rcollection_ref = db.collection("靜宜資管")
-
     docs = collection_ref.where("lab","==", 579).get()
-
     NewData = {"name": "子青老師"}
-
     for doc in docs:
-
         doc_ref = db.collection("靜宜資管").document(doc.id)
-
         doc_ref.update(NewData)
-
 
 @app.route('/spider')
 def spider():
@@ -242,6 +167,39 @@ def spider():
     return "近期上映電影已爬蟲及存檔完畢，網站最近更新日期為：" + lastUpdate 
 
 
+@sched.scheduled_job("interval", minutes=1)
+def timed_job():
+	url = "http://www.atmovies.com.tw/movie/next/"
+	Data = requests.get(url)
+	Data.encoding = "utf-8"
+	sp = BeautifulSoup(Data.text, "html.parser")
+	lastUpdate = sp.find("div", class_="smaller09").text[5:]
+	result = sp.select(".filmListAllX li")
+	for item in result:
+		picture = item.find("img").get("src").replace(" ", "")
+		title = item.find("div", class_="filmtitle").text
+		movie_id = item.find("div", class_="filmtitle").find(
+			"a").get("href").replace("/", "").replace("movie", "")
+		hyperlink = "http://www.atmovies.com.tw" + \
+			item.find("div", class_="filmtitle").find("a").get("href")
+		show = item.find("div", class_="runtime").text.replace("上映日期：", "")
+		show = show.replace("片長：", "")
+		show = show.replace("分", "")
+		showDate = show[0:10]
+		showLength = show[13:]
+		doc = {
+			"title": title,
+			"picture": picture,
+			"hyperlink": hyperlink,
+			"showDate": showDate,
+			"showLength": showLength,
+			"lastUpdate": lastUpdate
+		}
+		doc_ref = db.collection("電影").document(movie_id)
+		doc_ref.set(doc)
+
+
+sched.start()
 
 
 
