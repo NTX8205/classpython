@@ -3,8 +3,7 @@ from flask import Flask, render_template, request
 from datetime import datetime, timezone, timedelta
 import firebase_admin
 from firebase_admin import credentials, firestore
-cred = credentials.Certificate(
-    "project-analytics-8acd9-firebase-adminsdk-6usuy-2415c74209.json")
+cred = credentials.Certificate("project-analytics-8acd9-firebase-adminsdk-6usuy-2415c74209.json")
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 import requests
@@ -28,6 +27,7 @@ def index():
     homepage += "<br><a href=/update>上傳Firestore資料</a><br>"
     homepage += "<a href=/resource>MIS resource</a><br>"
     homepage += "<br><a href=/spider>讀取開眼電影即將上映影片，寫入Firestore</a><br>"
+    homepage += "<br><a href=/search>輸入關鍵字進行資料查詢</a><br>"
     return homepage
 
 @app.route('/mis')
